@@ -1,0 +1,23 @@
+﻿
+
+@model AmyzFactory.Models.TextsViewModel
+
+<form id="frmInfo">
+    <div class="container">
+        <label for="imgNameInput">Main Title:</label>
+        @Html.TextAreaFor(m => m.Title, new { @id = "headerTitle", @class = "form-control", placeholder = "اكتب هنا عنوان قصير عن المصنع", @type = "text" , @cols = "1", @rows = "2" })
+        @Html.ValidationMessageFor(m => m.Title, "")
+
+        <label for="imgNameInput">Sub Title:</label>
+        @Html.TextAreaFor(m => m.SubTitle, new { @id = "subTitle", @class = "form-control", placeholder = "اكتب هنا نبزة مختصرة عن الخدمات", @type = "text", @cols = "1", @rows = "4" })
+        @Html.ValidationMessageFor(m => m.SubTitle, "")
+
+
+        <label for="imgNameInput">Factory Details:</label>
+        @Html.TextAreaFor(m => m.Description, new { @id = "infoDesc", @class = "form-control", placeholder = "اكتب هنا التفصيل الخدمية التى يقدمها المصنع", @type = "text", @cols = "1", @rows = "7" })
+        @Html.ValidationMessageFor(m => m.Description, "")
+
+        <hr />
+        <button id="btnUpdateFrm" class="btn btn-success" onclick="updateInfoTexts('#btnUpdateFrm')" type="button" name="submit">Update</button>
+    </div>
+</form>

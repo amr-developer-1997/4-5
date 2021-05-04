@@ -1,0 +1,42 @@
+﻿
+@model IEnumerable<AmyzFactory.Models.ImagesViewModel>
+
+<style>
+    .carousel-inner img {
+        width: 100%;
+        height: 350px;
+    }
+</style>
+
+  
+ 
+
+
+
+<div id="slides-shop" class="cover-slides" style="height:500px; display:flex;">
+    <ul class="slides-container">
+
+
+        @foreach (var item in Model)
+        {
+            <li class="text-center">
+                <img src="@Url.Content(@item.ImageUrl)" alt="Responsive image">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20"><strong>أهلا بكم فى</strong></h1>
+                            <h1 class="m-b-20">أميـز لتجارة الأعلاف</h1>
+
+                            <p><a class="btn hvr-hover" href="@Url.Action("ShowProductsWithCategories","Product")">تصفح منتجاتنا</a></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+
+    </ul>
+    <div class="slides-navigation">
+        <a href="#" class="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+        <a href="#" class="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+    </div>
+</div>

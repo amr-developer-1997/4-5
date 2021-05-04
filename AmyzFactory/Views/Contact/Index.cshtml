@@ -1,0 +1,124 @@
+﻿@model AmyzFactory.Models.QuestionairViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- End All Title Box -->
+<!-- Start Contact Us  -->
+<div class="contact-box-main">
+    <div class="container">
+
+        <div>
+            <p class="page-define">تواصل معنــا</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 col-sm-12">
+                <div class="contact-form-right">
+                    <form id="frmQuest">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.UserName, new { @class = "lbll" })
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-control-user", @type = "text", @autocomplete = "off", @placeholder = "الاسم كامل" })
+                                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "help-block with-errors" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Email, new { @class = "lbll" })
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-user", @type = "email", @autocomplete = "off", @placeholder = "البريد الالكترونى" })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "help-block with-errors" })
+                               </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Question, new { @class = "lbll" })
+                                    @Html.TextAreaFor(m => m.Question, new { @class = "form-control form-control-user",@rows="4", @type = "text", @autocomplete = "off", @placeholder = "اكتب استفسارك هنا..." })
+                                    @Html.ValidationMessageFor(m => m.Question, "", new { @class = "help-block with-errors" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                 
+                                <div class="submit-button text-center">
+                                    <button id="btnSend" class="btn hvr-hover"  type="button">ارسل الان</button>
+                                    <div id="msgSubmit" class="h3 text-center hidden"></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+             
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Cart -->
+
+
+
+<script>
+
+
+
+    $(document).ready(function () {
+        $("#btnSend").click(function(){
+        
+            debugger;
+            if (!$('#frmQuest').valid()) {
+                return false;
+            }
+
+            disableBtn('#btnSend');
+
+            var formData = $('#frmQuest').serialize();
+
+ 
+            $.ajax({
+                url: "@Url.Action("CreateQuest", "Contact")",
+                type: "Post",
+                data: formData,
+                dataType: 'json',
+                success: function (data) {
+
+                    enableBtn('#btnSend', 'ارســال');
+ 
+                    if (data.IsSuccess) {
+                        clearFields();
+                         successDialog(data.Message);
+                    } else {
+                        failedDialog(data.Message);
+                    }
+
+                }
+            });
+
+        
+        });
+    })
+
+
+    var clearFields = function () {
+        $('#frmQuest').find("input").val("");
+        $('#frmQuest').find("textarea").val("");
+    }
+    
+    function enableBtn(btnId, message) {
+        $(btnId).html(message);
+        $(btnId).prop('disabled', false);
+    }
+
+    function disableBtn(btnId) {
+        $(btnId).html("wait..");
+        $(btnId).prop('disabled', true);
+    }
+   
+</script>
+

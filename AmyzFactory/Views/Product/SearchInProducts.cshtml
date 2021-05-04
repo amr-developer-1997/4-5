@@ -1,0 +1,68 @@
+﻿@model IEnumerable<AmyzFactory.Models.ProductViewModel>
+
+@{
+    ViewBag.Title = "SearchInProducts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string title = ViewBag.CategoryName;
+}
+<script src="~/Content/js/add_to_cart.js"></script>
+
+<div class="products-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1>@title</h1>
+                    <p>(@Model.Count()) منتج</p>
+                </div>
+            </div>
+        </div>
+     
+    @if (Model != null && Model.Count() > 0)
+    {
+        <div class="row"  style="margin:20px;">
+
+
+
+            @foreach (var product in Model)
+            {
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="products-single fix">
+                    <div class="box-img-hover">
+
+                        <div class="type-lb">
+
+                            <p class="new" style="font-weight:400;text-align:center;">@product.Price ج.م</p>
+                        </div>
+                        <img src="@product.ImageURL" class="img-fluid" alt="Image">
+                        <div class="mask-icon">
+                            <ul>
+                                <li><a  href="@Url.Action("ProductDetails","Product",new { @id=product.Id})" data-toggle="tooltip" data-placement="right" title="التفاصيل"><i class="fas fa-eye"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="اضف الى المفضلة"><i class="far fa-heart"></i></a></li>
+                            </ul>
+                            <a class="cart" onclick="addToCart(@product.Id)" href="javascript:void(0)">اضف الى العربة</a>
+                        </div>
+                      
+                    </div>
+                    <div class="why-text">
+                        <h4 class="product-catg-name">@product.Name</h4>
+                    </div>
+                </div>
+            </div>
+            }
+
+        </div>
+
+    }
+    else
+    {
+        <div id="emptyProducts" style="width:100%;height:100%">
+            <img style="margin-left:auto;margin-right:auto;display:block;" src="~/Content/img/empty_box.jpg" class="center" />
+            <b> <h1 style="text-align:center;color:red">لا يوجد منتجات</h1></b>
+        </div>
+    }
+
+
+
+        </div>
+</div>

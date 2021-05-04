@@ -1,0 +1,281 @@
+﻿@model IEnumerable<AmyzFactory.Models.ProductViewModel>
+
+@{
+    ViewBag.Title = "ShowProductsWithCategories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string title = "جميع منتجاتنا";
+    List<AmyzFactory.Models.CategoryViewModel> departments = ViewBag.Categories;
+}
+
+
+
+ 
+<div class="shop-box-inner">
+    <div class="container">
+        
+        <div>
+            <p class="page-define">منتجاتنـــا</p>
+        </div>
+
+      
+
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
+                <div class="product-categori">
+                    
+                    <div class="filter-sidebar-left" style="text-align:right">
+                        <div class="title-left">
+                            <h3 class="footer-title">الأقسام</h3>
+                        </div>
+                        <div >
+
+                            <a  class="department-name categories" data-catid="0" data-name="الكل" href="javascript:void(0)">
+                                الكل
+                            </a>
+
+                            @if (departments != null && departments.Count > 0)
+                            {
+                                foreach (var item in departments)
+                                {
+                                    <div>
+                                        <p class="department-name">
+                                            @item.Name
+                                            <small class="text-muted">(@item.Categories.Count)</small>
+                                        </p>
+                                        <div >
+                                            <div class="list-group">
+                                                @foreach (var category in item.Categories)
+                                                {
+                                                    <a href="javascript:void(0)"  data-name="@category.Name" data-catid="@category.Id" class="category-name categories">@category.Name</a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">
+
+                <div class="right-product-box">
+                    <div class="product-item-filter row">
+
+                        <div class="col-12 col-sm-4 text-center text-sm-right">
+                            <ul class="nav nav-tabs ml-auto">
+                                <li>
+                                    <a class="nav-link active" href="#grid-view" data-toggle="tab"> <i class="fa fa-th"></i> </a>
+                                </li>
+                                <li>
+                                    <a  class="nav-link" href="#list-view" data-toggle="tab"> <i class="fa fa-list-ul"></i> </a>
+                                </li>
+                              
+                            </ul>
+                        </div>
+
+                        <div class="col-12 col-sm-4 text-center text-sm-right">
+                            <ul class="nav nav-tabs ml-auto">
+                                <li>
+                                    <span id="currentState"> @title </span>
+                                </li>
+                                <li>
+                                    <span id="productsCount">(@Model.Count())منتج</span>
+                                </li>
+                            </ul>
+                        </div>
+                       
+                     
+
+                    </div>
+
+                    <div class="product-categorie-box">
+                        <div class="tab-content" id="productsContainer">
+
+                            <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
+
+                                <div class="row" id="gridProducts">
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div role="tabpanel" class="tab-pane fade" id="list-view">
+
+
+                                <div class="list-view-box">
+
+                                    <div class="row"  id="listProducts">
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<!-- End Shop Page -->
+
+
+
+ <script src="~/Content/js/add_to_cart.js"></script>
+
+<script>
+
+    function fillGrideView(product) {
+
+        var html = '';
+
+        html +=
+                '<div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">' +
+                '<div class="products-single fix"> <div class="box-img-hover">' +
+                '<div class="type-lb">' +
+                '<p class="new" style="font-weight:400;text-align:center;">' + product.Price + ' ج.م' + '</p>' +
+                '</div>' +
+                '<img src="' + product.ImageURL + '" width="250px" height="250px" img-fluid" alt="Image">' +
+                '<div class="mask-icon">' +
+                '<ul>' +
+                '<li><a href="@Url.Action("ProductDetails", "Product")?id=' + product.Id + '" data-toggle="tooltip" data-placement="right" title="التفاصيل"><i class="fas fa-eye"></i></a></li>' +
+                '<li><a href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="اضف الى المفضلة"><i class="far fa-heart"></i></a></li>' +
+                '</ul>' +
+                '<a onclick="addToCart(' + product.Id + ')" class="cart" href="javascript:void(0)" >اضف الى العربة</a>' +
+                '</div>' +
+                '</div>' +
+                '<div class="why-text">' +
+                '<h4 class="product-catg-name">' + product.Name + '</h4>' +
+                  '</div>' +
+                 '</div>' +
+                '</div>' ;
+
+
+        $('#gridProducts').append(html);
+
+    }
+
+    function fillListView(product) {
+        var html = '';
+
+        html +=
+                '<div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">' +
+                '<div class="products-single fix">' +
+                '<div class="box-img-hover">' +
+                '<div class="type-lb">' +
+                '<p class="new">' + product.CategoryName + '</p>' +
+                '</div>' +
+                '<img src="' + product.ImageURL + '" width="250px" height="250px" class="img-fluid" alt="Image">' +
+                '<div class="mask-icon">' +
+                '<ul>' +
+                '<li><a href="@Url.Action("ProductDetails", "Product")?id=' + product.Id + '" data-toggle="tooltip" data-placement="right" title="التفاصيل"><i class="fas fa-eye"></i></a></li>' +
+                '<li><a href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="اضف الى المفضلة"><i class="far fa-heart"></i></a></li>' +
+                '</ul>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">' +
+                '<div class="why-text full-width">' +
+               '<h4>' + product.Name + '</h4>' +
+               '<h5>' + product.Price + 'ج.م' + '</h5>' +
+               '<p>' + product.Definition + '</p>' +
+               '<a onclick="addToCart(' + product.Id + ')" class="btn hvr-hover add-to-card" itemid="' + product.Id + '" href="javascript:void(0)">اضف الى العربة</a>' +
+               '</div>' +
+               '</div>' ;
+
+
+        $('#listProducts').append(html);
+
+
+    }
+
+
+
+
+    $(document).ready(function () {
+
+        getProducts("0", "الكل");
+
+
+
+
+
+
+    });
+
+    $(document).ready(function () {
+        $('.categories').click(function () {
+
+            var categoryId = $(this).attr("data-catid");
+            var categoryName = $(this).attr("data-name");
+
+            debugger;
+            getProducts(categoryId,categoryName);
+        })
+
+
+
+
+
+
+
+
+    })
+
+
+
+    function getProducts(categoryID, categoryName) {
+
+        // when categoryID=0 thats mean get all products
+
+
+        var URL = '';
+        debugger;
+        if (categoryID === "0") {
+            URL = '@Url.Action("GetAllProducts", "Product")';
+        } else {
+            URL = '@Url.Action("GetProductsByCategoryID", "Product")?categoryID=' + categoryID;
+        }
+
+
+        $.ajax({
+            url: URL,
+            type: "Get",
+            dataType: "json",
+            success: function (data) {
+
+                $('#listProducts').empty();
+
+                $('#gridProducts').empty();
+
+                $('#currentState').text(categoryName);
+
+                if (data != null)
+                {
+
+                    $('#productsCount').text(' (' + data.length + ')' + " منتج ");
+
+                    $.each(data, function (index, value) {
+                        fillGrideView(value);
+                        fillListView(value);
+                    });
+                }
+
+            }
+        });
+    }
+
+
+
+</script>

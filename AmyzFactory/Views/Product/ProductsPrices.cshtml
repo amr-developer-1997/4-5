@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "ProductsPrices";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+
+@model  IEnumerable< AmyzFactory.Models.ProductViewModel>
+
+<!-- Trigger the Modal -->
+ 
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- The Close Button -->
+    <span class="close">&times;</span>
+
+    <!-- Modal Content (The Image) -->
+    <img class="modal-content" id="img01">
+
+    <!-- Modal Caption (Image Text) -->
+    <div id="caption"></div>
+</div>
+
+
+<div class="wishlist-box-main">
+    <div class="container">
+        <div>
+            <p class="page-define">أسعار المنتجــات</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-main table-responsive">
+                    <table class="table" style="text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>الصورة</th>
+                                <th>اسم المنتج</th>
+                                <th>الفئة</th>
+                                <th>السعر/طن</th>
+                                <th>التفاصيل</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if (Model != null && Model.Count() > 0)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    string imgID = "img" + item.Id;
+                                     
+                                    <tr>
+                                        <td class="thumbnail-img">
+                                            <a href="#">
+                                                <img id="@imgID" class="img-fluid" style="border-radius: 50%" alt="Avatar" onclick="showImageDialog(@imgID)" src="@item.ImageURL" />
+                                            </a>
+                                        </td>
+                                        <td class="name-pr">
+                                            <p class="product-catg-name">
+                                             @item.Name
+                                            </p>
+                                        </td>
+                                        <td class="name-pr">
+                                            <p class="product-catg-name" style="color:#ff6a00">
+                                                @item.CategoryName
+                                            </p>
+                                        </td>
+                                        <td class="price-tbl">
+                                            <p class="product-catg-name" style="color:#62A73C;">@item.Price ح.م</p>
+                                        </td>
+
+                                        <td class="add-pr">
+                                            @Html.ActionLink("اظهار التفاصيل", "ProductDetails", "Product", new { id=item.Id},new { @class= "btn hvr-hover" })
+                                        </td>
+                                    </tr>
+
+                                }
+                            }
+
+                       
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+
+    function showImageDialog(imgID) {
+     
+       
+        var imageUrl =$('#'+imgID).src;
+
+        $('#img01').src=imageUrl;
+        $('#myModal').modal('show');
+
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+    }
+
+   
+</script>

@@ -1,0 +1,49 @@
+﻿@model AmyzFactory.Models.ContactViewModel
+
+
+<div class="table-responsive">
+
+    <form id="FrmEmail">
+        
+        <table class="table table-bordered table-hover">
+
+            <caption>You can Add / Delete E-mail</caption>
+            <thead>
+                <tr>
+
+                    <th>
+                        <label for="emailInput">E-mail Title:</label>
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "اكتب هنا مالك البريد الالكترونى مثال : الدعم الفنى", @type = "text" })
+                        @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+                    </th>
+                    <th>
+                        <label for="emailInput">E-mail :</label>
+                        @Html.TextBoxFor(m => m.Value, new { @class = "form-control", placeholder = "اكتب هنا البريد الالكترونى ", @type = "text" })
+                        @Html.ValidationMessageFor(m => m.Value, null, new { @class = "text-danger" })
+                    </th>
+                    <th>
+                        <button id="btnAddEmail" onclick="addAddress('#FrmEmail','@Url.Action("CreateEmail","HomePage")' ,'EmailTblContainer','@Url.Action("DeleteEmail","HomePage")', '#btnAddEmail')" class="btn btn-warning btn-block" type="button">Add</button>
+                    </th>
+
+                </tr>
+            </thead>
+
+
+            <tbody id="EmailTblContainer"></tbody>
+
+
+            <!-- End Add & Delet Email -->
+        </table>
+
+    
+    </form>
+       
+</div>
+
+
+
+
+
+
+
+   

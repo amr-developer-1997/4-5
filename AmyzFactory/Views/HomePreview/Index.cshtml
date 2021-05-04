@@ -1,0 +1,129 @@
+﻿
+ 
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+ 
+  <!-- slid-->
+@{
+    Html.RenderAction("_GetSliderimages", "HomePreview");
+}
+<!-- End Slid-->
+
+
+ <!-- Start Categories  -->
+
+<!-- End Categories -->
+ <!-- Start About Page  -->
+
+<div class="title-all text-center content-description">
+    <h1 style="font-weight:500;font-size:35px;">خدمات<span style="color:#f19304;"> أميز </span></h1>
+</div>
+
+<div class="box-add-products">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="shop-cat-box">
+                    <img class="img-fluid" src="~/Content/img/prices.png" alt="" />
+                    <a class="btn hvr-hover" href="@Url.Action("ProductsPrices","Product")">أسعار المنتجات</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="shop-cat-box">
+                    <img class="img-fluid" src="~/Content/img/quality.jpg" alt="" />
+                    <a class="btn hvr-hover" href="@Url.Action("Index","Quantity")">الرقابة والجودة</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="shop-cat-box">
+                    <img class="img-fluid" src="~/Content/img/feeding.jpg" alt="" />
+                    <a class="btn hvr-hover" href="@Url.Action("Index","FeedProgram")">برامج التغذية</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="title-all text-center content-description">
+    <h1 style="font-weight:500;font-size:35px;">أقسام أميز<span style="color:#f19304;"> للأعلاف </span></h1>
+</div>
+ @{
+     Html.RenderAction("_GetDepartments", "HomePreview");
+}
+
+
+<div class="title-all text-center content-description">
+    <h1 style="font-weight:500;font-size:35px;">تصفح<span style="color:#f19304;"> منتجاتنا </span></h1>
+</div>
+
+@{
+    Html.RenderAction("_GetAllProducts", "HomePreview");
+}
+
+
+
+
+
+
+
+<div class="title-all text-center content-description">
+    <h1 style="font-weight:500;font-size:35px;">معلومات<span style="color:#f19304;"> عنا </span></h1>
+</div>
+
+@{
+    Html.RenderAction("_GetInfo", "HomePreview");
+}
+
+
+
+
+    <!-- End About Page -->
+    <!-- Start Products  -->
+
+
+    <!-- End Products  -->
+    <!-- Start Blog  -->
+
+    <div class="latest-blog">
+        <div class="container">
+       
+
+            <div class="row"  style="justify-content: center;">
+                @{
+                    Html.RenderAction("_GetArticles", "HomePreview");
+                }
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+ 
+
+<div class="title-all text-center content-description">
+    <h1 style="font-weight:500;font-size:35px;">المسئوليات و<span style="color:#f19304;"> المهام </span></h1>
+</div>
+
+@{
+    Html.RenderAction("_GetResponsibilty", "HomePreview");
+}
+
+ 
+
+
+
+
+
+
+    <!-- End Blog  -->
+ 

@@ -1,0 +1,247 @@
+﻿
+
+@model AmyzFactory.Models.ProductViewModel
+
+
+<div class="form-group">
+    <p><strong>Select product image:</strong></p>
+    <input id="productImageInput" type="file" name="image" accept="image/*" onchange="viewImageFile('#productImageInput', '#productDescription', '#productTargetImg', '#imgProductPreview',250,250)">
+</div>
+ 
+
+<div id="imgProductPreview" class="thumbnail" style="display:none">
+    <img class="img-responsive" id="productTargetImg" width="120" height="120" />
+    <div class="caption">
+        <a href="#" onclick="clearPreview('#productImageInput', '#productDescription', '#imgProductPreview')"> Clear </a>
+        <span id="productDescription"></span>
+    </div>
+    <hr />
+</div>
+
+<div class="form-group">
+    <label for="proName" class="col-sm-2 control-label"><strong>Product Name</strong></label>
+    <div class="col-sm-10">
+        @Html.TextAreaFor(m => m.Name, new { @class = "form-control", @placeholder = "اكتب هنا نوع العلف مثال : علف ماشية تسمين  ( 14 % بروتين )", @id = "name" })
+        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+
+    </div>
+</div><!-- /.Form-Group -->
+
+<div class="form-group">
+    <label for="proName" class="col-sm-2 control-label"><strong>Defenition</strong> </label>
+    <div class="col-sm-10">
+        @Html.TextAreaFor(m => m.Definition, new { @class = "form-control", @id = "definition", @placeholder = "اكتب هنا تعريف العلف مثال : ذرة صفراء مجروشة – كسب عباد شمس 36 % – نخالة قمح – مسحوق حجر جيري – آحادي فوسفات الكالسيوم – ملح طعام – بيكربونات الصوديوم – مخلوط فيتامينات وأملاح ( بريمكس ) – مضاد سموم فطرية .", @cols = "1", @rows = "5" })
+        @Html.ValidationMessageFor(m => m.Definition,"", new { @class = "text-danger" })
+     </div>
+</div><!-- /.Form-Group -->
+
+<div class="form-group">
+    <label for="proName" class="col-sm-2 control-label"><strong>Content</strong> </label>
+    <div class="col-sm-10">
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @id = "description", @placeholder = "اكتب هنا المحتوي من المركبات  الغذائية للعلف مثال : \n بروتين خام لا يقل عن 14 % - \n دهن خام لا يقل عن 2.9 % - \n ألياف خام لا تزيد عن 16.5 % - \n المكونات الغذائية المهضومة TDN لا تقل عن  68.5 % -", @cols = "1", @rows = "7" })
+        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+     </div>
+</div><!-- /.Form-Group -->
+
+
+<div class="form-group">
+    <label for="proName" class="col-sm-2 control-label"><strong>Quantity</strong> </label>
+    <div class="col-sm-2">
+        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", @placeholder = "الكمية بالطن", @id = "quantity" })
+        @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
+    </div>
+</div><!-- /.Form-Group -->
+
+<div class="form-group">
+    <label for="proName" class="col-sm-2 control-label"><strong>Price</strong> </label>
+    <div class="col-sm-2">
+        @Html.TextBoxFor(m => m.Price, new { @class = "form-control", @placeholder = " سعر الطن الواحد", @id = "price"})
+        @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+    </div>
+</div><!-- /.Form-Group -->
+
+
+<div class="form-group">
+    <label for="proName" class="col-sm-4 control-label" ><strong>Is visibile in site?</strong></label>
+    @Html.DropDownListFor(model => model.isVisible, new List<SelectListItem>(){
+                                new SelectListItem { Value = "true", Text = "Yes" },
+                                 new SelectListItem { Value = "false", Text = "No" }},
+                                 new { @class = "col-sm-2 form-control", @id = "visibility" })
+</div><!-- /.Form-Group -->
+
+
+
+<script>
+
+
+
+
+    var oTable;
+
+
+    var bindDataTable = function (tableID) {
+        debugger;
+        if ($.fn.DataTable.isDataTable("#" + tableID)) {
+             oTable.draw();
+        }
+        else {
+
+ 
+
+            var Url = "@Url.Action("AllProducts", "Products")";
+
+            oTable = $("#" + tableID).DataTable({
+
+                "bServerSide": true,
+                "sAjaxSource": Url,
+                "fnServerData": function (sSource, aoData, fnCallback) {
+
+                    $.ajax({
+
+                        type: "Get",
+                        data: aoData,
+                        url: sSource,
+                        success: fnCallback
+                    })
+
+                },
+                "aoColumns": [
+                    { "mData": "Name" },
+                     { "mData": "CategoryName" },
+                    { "mData": "Price" },
+                   { "mData": "Quantity" },
+                    { "mData": "isVisible" },
+                      {
+                          "mData": "Id",
+                          "render": function (Id, type, full, meta) {
+                              return '<a class="btn btn-success" href="javascript:void(0)" style="margin-right: 4px;"  onclick="editProduct(' + Id + ')"><i class="fa fa-pencil-alt"></i></a>' +
+                                  '<a class="btn btn-danger" href="javascript:void(0)" style="margin-right: 4px;"  onclick="deleteProduct(\'' + '@Url.Action("Delete", "Products")?id=' + Id + '\',\'' + tableID + '\')"><i class="fa fa-trash-alt"></i></a>' +
+                                  '<a class="btn btn-info"  href="@Url.Action("ProductDetails", "Products")?id="'+Id+'"><i class="fa fa-info"></i></a>'
+                          }
+                      }
+                ]
+
+
+
+            });
+        }
+       
+    }
+
+
+     
+
+   
+
+
+
+    // add new Product
+
+    var addProduct = function (tblId, Url, categoryID, frmID, btnID) {
+
+        // validation 
+   
+        if (!$(frmID).valid()) {
+            return false;
+        }
+
+
+        disableBtn(btnID);
+
+        var formData = new FormData();
+        var file = $('#productImageInput').get(0).files;
+
+        if (categoryID !== null) {
+            formData.append("CategoryID", categoryID);
+        }
+
+        formData.append("Name", $('#name').val());
+        formData.append("Definition", $('#definition').val());
+        formData.append("Description", $('#description').val());
+        formData.append("isVisible", $('#visibility').val());
+        formData.append("Quantity", $('#quantity').val());
+        formData.append("Price", $('#price').val());
+        formData.append("ImageFile", file[0]);
+        
+        
+
+        // for image upload
+
+ 
+        $.ajax({
+            url: Url,
+            type: "Post",
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (data) {
+
+                enableBtn(btnID, "Upload");
+
+                if (data.ResponseResult.IsSuccess) {
+                    clearPreview('#productImageInput', '#productDescription', '#imgProductPreview');
+                    clearfields();
+                    successDialog(data.ResponseResult.Message);
+                    bindDataTable("tblProducts");
+                } else {
+                    failedDialog(data.ResponseResult.Message);
+                }
+
+            }
+        });
+
+    }
+
+
+    var editProduct = function (id) {
+        var url = "@Url.Action("EditProduct", "Products")?id=" + id;
+
+        $("#modelBody").load(url, function () {
+            $("#productModal").modal("show");
+        })
+
+    }
+
+    var deleteProduct = function (URL) {
+ 
+        $.ajax({
+            url: URL,
+            type: "Get",
+            dataType: "json",
+            success: function (data) {
+
+                if (data.IsSuccess) {
+                    successDialog(data.Message);
+                    bindDataTable("tblProducts");
+ 
+                } else {
+                    failedDialog(data.Message);
+                }
+            }
+
+        });
+
+    }
+
+
+    function clearfields() {
+        $('#name').val('');
+        $('#definition').val('');
+        $('#description').val('');
+        $('#quantity').val('');
+        $('#price').val('');
+    }
+
+    function enableBtn(btnId, message) {
+        $(btnId).html(message);
+        $(btnId).prop('disabled', false);
+    }
+
+    function disableBtn(btnId) {
+        $(btnId).html("Please wait...");
+        $(btnId).prop('disabled', true);
+    }
+
+
+</script>

@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "AboutUS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var phones = ViewBag.Phones;
+    var emails = ViewBag.Emails;
+}
+
+ @model AmyzFactory.Models.TextsViewModel
+
+<div class="shop-box-inner">
+    <div class="container">
+   
+        <div>
+            <p class="page-define">معلومات عنا</p>
+        </div>
+
+
+
+        <div class="about-box-main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="banner-frame">
+                            <img class="img-fluid shadow-img" style="width:500px;height:400px;" src="@Model.ImageUrl" alt="" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6" style="text-align:right;">
+
+                        <h2 class="noo-sh-title-top footer-title" style="color:#62A73C;">@Model.Title</h2>
+                        <p class="footer-text">
+                            <b>@Model.SubTitle</b>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="footer-title" style="margin:20px;">
+                @if (Model.Description != null)
+                {
+                    using (StringReader reader = new StringReader(Model.Description))
+                    {
+                        string line;
+                        <ul>
+                            @while ((line = reader.ReadLine()) != null)
+                    {
+
+                                <li class="footer-text">@line</li>
+
+                            }
+                        </ul>
+
+
+                    }
+                }
+             
+            </p>
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+ <!-- Start My Account  -->
+<div class="my-account-box-main">
+    <div class="container">
+        <div class="my-account-page">
+            <div class="row">
+
+                <div class="col-lg-2">
+                   
+                </div>
+              
+                <div class="col-lg-4 col-md-12">
+                    <div class="account-box">
+                        <div class="service-box">
+                            <div class="service-icon">
+                                <a href="#"><i class="fas fa-clock"></i> </a>
+                            </div>
+                            <div class="service-desc">
+                                <h4>أوقــات العمــل</h4>
+                                <p>من الأحد الى الخميس</p>
+                                <p>من الساعة 8 صباحا الى الساعة 5 مساءا</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="account-box">
+                        <div class="service-box">
+                            <div class="service-icon">
+                                <a href="#"> <i class="fas fa-map-marker-alt"></i> </a>
+                            </div>
+                            <div class="service-desc">
+                                <h4>عنــوان المصنــع</h4>
+                                <p>قويسنا المنوفية بجوار ستاحة الطلائع طريق جيهان اتجاه القاهرة</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- End My Account -->
+
+
+
+ 
+ 
+<div class="row my-5">
+
+
+    <div class="col-2 col-sm-6 col-lg-2">
+    </div>
+
+    <div class="col-4 col-sm-6 col-lg-4">
+        <div class="service-block-inner">
+            <h3 class="footer-title">أرقامنا</h3>
+            @foreach (var item in phones)
+            {
+                <p class="footer-text"> <b>@item.Title:</b> <span> @item.Value</span> </p>
+            }
+        </div>
+    </div>
+    <div class="col-4 col-sm-6 col-lg-4">
+        <div class="service-block-inner">
+            <h3 class="footer-title">حساباتنا الالكترونية</h3>
+            @foreach (var item in emails)
+            {
+                <p class="footer-text"> <b>@item.Title: </b> <span> @item.Value</span> </p>
+            }
+        </div>
+    </div>
+
+    <div class="col-2 col-sm-6 col-lg-2">
+    </div>
+</div>
+
+
+
+

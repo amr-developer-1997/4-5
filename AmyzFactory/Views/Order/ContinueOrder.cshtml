@@ -1,0 +1,125 @@
+﻿
+@model  AmyzFactory.Models.OrderViewModel 
+
+@{
+    ViewBag.Title = "ContinueOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+     List<AmyzFactory.Models.ProductViewModel> products= ViewBag.Products ;
+}
+
+
+ <!-- Start Cart  -->
+<div class="cart-box-main">
+    <div class="container">
+      
+        <div class="row">
+            <div class="col-sm-6 col-lg-6 mb-3">
+                <div class="checkout-address">
+                    <div class="title-left">
+                        <h3 class="footer-title">عنوان الشحن</h3>
+                    </div>
+                    <form class="needs-validation" id="frmConfirmOrder" style="direction:rtl;">
+                        <div class="mb-3">
+                            @Html.LabelFor(x=>x.Addreess, null, new { @class = "form-control", @style = "text-align:center; color:#62A73C;" })
+                            @Html.TextBoxFor(x => x.Addreess, null, new { @class = "form-control", @placeholder = "وضح المدينة واسم الشارع تفصيلياً" })
+                        </div>
+                        <div class="mb-3">
+                            @Html.LabelFor(x => x.Phone, null, new { @class = "form-control", @style = "text-align:center; color:#62A73C;" })
+                            @Html.TextBoxFor(x => x.Phone, null, new { @class = "form-control", @placeholder = "رقم الهاتف" })
+                        </div>
+
+                        
+                        <hr class="mb-4">
+                        <div class="col-12 d-flex shopping-box">
+                            <button onclick="confirmOrder()" type="button" class="ml-auto btn hvr-hover">تأكيد الطلب</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-3">
+                <div class="row">
+                  
+                    <div class="col-md-12 col-lg-12">
+                        <div class="odr-box">
+                            <div class="title-left" style="text-align:right;">
+                                <h3>المنتجات</h3>
+                            </div>
+                            <div class="rounded p-2 bg-light" style="text-align:right;">
+                                @if (products != null && products.Count() > 0)
+                                {
+                                    foreach (var item in products)
+                                    {
+                                        <div class="media mb-2 border-bottom">
+                                            <div class="media-body">
+                                                <a href="@Url.Action("ProductDetails","Product",new { @id=item.Id})"> @item.Name</a>
+                                                <div class="small text-muted">السعر : @item.Price <span class="mx-2">|</span>الكمية : @item.Quantity   <span class="mx-2">|</span>الاجمالى : @item.Total  </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                               
+                              
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12">
+                        <div class="order-box">
+                            <div class="title-left">
+                                <h3 class="footer-title">طلبك</h3>
+                            </div>
+                           
+                            <hr class="my-1">
+                            @{
+                                Html.RenderAction("_GetOrderProducts", "Order");
+                            }
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- End Cart -->
+
+
+<script>
+    function confirmOrder() {
+
+
+        var orderHeaderData = $('#frmConfirmOrder').serialize();
+
+
+
+
+        
+
+
+        function goToIndex() {
+            window.location.href = '/HomePreview/Index/';
+        }
+
+
+ 
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: "/Order/ConfirmOrder",
+            data: orderHeaderData,
+            success: function (response) {
+                if (response.IsSuccess) {
+                    successDialogEdit(response.Message);
+                    setTimeout(goToIndex, 3000);
+
+                } else {
+                    failedDialog(response.Message);
+                }
+            },
+            dataType: "json"
+        });
+
+    }
+
+</script>

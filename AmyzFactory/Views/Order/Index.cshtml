@@ -1,0 +1,265 @@
+﻿
+@model List<AmyzFactory.Models.ProductViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    float shippingCost = 30.5f;
+    int counter = 0;
+ }
+
+ 
+
+   <!-- Start Cart  -->
+<div class="cart-box-main" id="sectionContainer">
+    <div class="container">
+        <div>
+            <p class="page-define">سلة المشتريــات</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-main table-responsive">
+                    <table id="tbl" class="table" style="text-align:center;">
+                        <thead>
+                            <tr style="text-align:center;">
+                                <th>الصورة</th>
+                                <th>اسم المنتج</th>
+                                <th>السعر</th>
+                                <th>الكمية</th>
+                                <th>الاجمالى</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                for (int i = 0; i < Model.Count(); i++)
+                                {
+
+                                    var item = Model[i];
+
+                                    var rowId = "tr" + item.Id;
+                                    var totalId = "total" + item.Id;
+                                    var qtyId = "qty" + item.Id;
+                                    var priceId = "price" + counter;
+                                    var qty = "price" + counter;
+
+
+
+
+                                    <tr id="@rowId">
+                                        <td class="thumbnail-img">
+                                            <a href="@Url.Action("ProductDetails","Product",new { @id=item.Id})">
+                                                <img class="img-fluid" src="@item.ImageURL" alt="" />
+                                            </a>
+                                        </td>
+                                        <td class="name-pr">
+                                            <a href="@Url.Action("ProductDetails","Product",new { @id=item.Id})">
+                                                @item.Name
+                                            </a>
+                                        </td>
+                                        <td class="price-pr">
+                                            @item.Price.ToString("#,##0.00")
+                                        </td>
+
+                                        <td class="quantity-box">
+                                            <input type="number" total-id="@totalId" item-position="@i" item-price="@item.Price" min="1" max="15" value="@item.Quantity" />
+                                        </td>
+                                        <td class="total-pr">
+                                            <p id="@totalId">@item.Total.ToString("#,##0.00")</p>
+                                        </td>
+
+                                        <td class="remove-pr">
+                                            <a href="javascript:void(0)" onclick="deleteRow(@item.Id)">
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        </td>
+
+                          
+                                    </tr>
+                                }
+                            }
+ 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="row my-5" >
+            <div class="col-lg-8 col-sm-12"></div>
+            <div class="col-lg-4 col-sm-12">
+                @{
+                    Html.RenderAction("_GetOrderProducts", "Order");
+                }
+            </div>
+            <div class="col-12 d-flex shopping-box"><a href="javascript:void(0)" onclick="continueOrder()" class="ml-auto btn hvr-hover">متابعه الطلب</a> </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="emptyContainer" style="width:100%;height:100%">
+    <img style="margin-left:auto;margin-right:auto;display:block;" src="~/Content/img/empty_box.jpg" class="center" />
+    <b> <h1 style="text-align:center;color:red">سلة المشتريات فارغة</h1></b>
+
+</div>
+<!-- End Cart -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    $(function () {
+        $(document).ajaxError(function (e, xhr) {
+            if (xhr.status == 403) {
+                var response = $.parseJSON(xhr.responseText);
+                window.location = response.LogOnUrl;
+            }
+        });
+    });
+
+    var list = @Html.Raw(Json.Encode(Model));
+   
+    $(document).ready(function () {
+        $('#emptyContainer').hide();
+
+        if(list!==null){
+            updateInvoice();
+        }
+    });
+
+    $('#tbl').on('change', 'input', function () {
+        var totalID = $(this).attr("total-id")
+        var qty = $(this).val();
+        var price = $(this).attr("item-price")
+        var itemPosition = $(this).attr("item-position")
+
+        var totalValue = qty * price;
+        list[itemPosition].Total = totalValue;
+        list[itemPosition].Quantity=qty;
+        $("#" + totalID).text(totalValue.toFixed(2).toString());
+        updateInvoice();
+    });
+
+    function updateInvoice() {
+        debugger;
+        var total = 0.0;
+        var partial=0.0;
+        var shippingCost=$('#shippingValue').attr("shipping-cost");
+        
+        list.forEach(function (item) {
+            total=total+item.Total;
+        });
+
+        partial=parseFloat(total);
+        $('#partialPrice').text(partial);
+
+        total= parseFloat(total)+parseFloat(shippingCost);
+        total=parseFloat(total).toFixed(2);
+        $('#invoicePrice').text(total);
+    }
+
+    function deleteRow(itemID) {
+
+        var URL = "/Order/Delete?itemID=" + itemID;
+        var rawID = "tr" + itemID;
+
+        $.ajax({
+            url: URL,
+            type: "Get",
+            dataType: "json",
+            success: function (data) {
+                if (data.IsSuccess) {
+                    $('#counterText').text(data.Message);
+                  
+                   // delete list[itemPosition];
+                //    list.splice(itemPosition-1,1);
+
+                    for (var i = 0; i < list.length; i++) {
+                        var obj = list[i];
+                        if(obj.Id===itemID){
+                            list.splice(i, 1);
+                        }
+                      
+                    }
+
+
+                    $('#' + rawID).remove();
+
+                    debugger;
+                    if(list.length ===0){
+                        $('#sectionContainer').remove();
+                        $('#emptyContainer').show();
+                    }else {
+                        updateInvoice();
+                    }
+
+                }
+            }
+        });
+
+ 
+    }
+
+
+    function continueOrder() {
+
+
+        var finalList = new Array();
+
+
+        $.each(list, function (index, element) {
+            debugger;
+
+            var ProductViewModel = {};
+            if (element != null) {
+                ProductViewModel.Name = element.Name;
+                ProductViewModel.Id = element.Id;
+                ProductViewModel.ImageURL = element.ImageURL;
+                ProductViewModel.Price = element.Price;
+                ProductViewModel.Quantity = element.Quantity;
+                ProductViewModel.Total = element.Total;
+                finalList.push(ProductViewModel);
+            }
+        });
+
+
+         
+
+
+        var dataJson = JSON.stringify(finalList);
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: "/Order/ContinueOrder",
+            data: dataJson,
+            success: function (response) {
+                window.location.href =response ;
+            },
+            dataType: "json",
+            contentType: 'application/json; charset=utf=8',
+            traditional: true
+        });
+
+    }
+
+   
+</script>

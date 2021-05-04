@@ -1,0 +1,393 @@
+﻿
+@using Microsoft.AspNet.Identity
+
+@{
+    var list = Session[AmyzFactory.Models.SessionsModel.CartItems] as List<AmyzFactory.Models.ProductViewModel>;
+
+    int cartCounter = 0;
+
+    if (list != null && list.Count > 0)
+    {
+        cartCounter = list.Count;
+    }
+
+    string userName = User.Identity.Name;
+
+ }
+
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<!-- Basic -->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Site Metas -->
+    <title>اميز للأسمدة والعلف</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="~/Content/img/logo-icon.ico" type="image/x-icon">
+    <link rel="logo-icon" href="~/Content/img/logo-icon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css">
+    <!-- Site CSS -->
+
+    <link rel="stylesheet" href="~/Content/css/style.css">
+    <link rel="stylesheet" href="~/Content/css/responsive.css">
+    <link rel="stylesheet" href="~/Content/css/custom.css">
+    <link rel="stylesheet" href="~/Content/css/style-slide-profile.css">
+
+ 
+
+    @Styles.Render("~/bundles/css_user")
+
+</head>
+
+<body>
+
+  
+
+    <!-- Start Main Top -->
+    <div class="main-top">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-6 col-sm-12 col-xs-12">
+                    <div class="our-link">
+                        <ul>
+                            @{
+                                Html.RenderAction("GetCurrentUser", "Accounts");
+                            }
+                            <li><a href="#"><i class="fas fa-location-arrow"></i> موقعنا</a></li>
+                            <li><a href="#myFooter"><i class="fas fa-headset"></i> تواصل معنا</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Main Top -->
+    <!-- Start Main Top -->
+    <header class="main-header">
+        <!-- Start Navigation -->
+    
+        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav">
+            <div class="container">
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="@Url.Action("Index","HomePreview")"><img src="~/Content/img/logo.svg" style="max-height:64px;max-width:64px;" class="logo" alt="Responsive image"></a>
+                </div>
+                <!-- End Header Navigation -->
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu" style="direction:rtl;">
+
+                    <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
+                        <li class="nav-item" id="home">
+                            @Html.ActionLink("الرئيسية", "Index", "HomePreview", null, new { @class = "nav-link" })
+                        </li>
+
+                        <li class="nav-item" id="products">
+                            @Html.ActionLink("منتجاتنا", "ShowProductsWithCategories", "Product", null, new { @class = "nav-link" })
+                        </li>
+
+
+                        <li class="nav-item" id="prices">
+                            @Html.ActionLink("الأسعار", "ProductsPrices", "Product", null, new { @class = "nav-link" })
+                        </li>
+
+                        <li class="nav-item" id="quality">
+                            @Html.ActionLink("جودة المنتج", "Index", "Quantity", null, new { @class = "nav-link" })
+                        </li>
+
+                        <li class="nav-item" id="about">
+                            @Html.ActionLink("من نحن", "AboutUS", "HomePreview", null, new { @class = "nav-link" })
+                        </li>
+
+                        <li class="nav-item" id="contact">
+                            @Html.ActionLink("تواصل معنا", "Index", "Contact", null, new { @class = "nav-link" })
+                        </li>
+ 
+                      
+
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" id="searchText" type="search" placeholder="ماذا تريد؟" aria-label="Search">
+                        <a  href="javascript:void(0)" id="searching" class="circle-shape" title="بحث"><i class="fas fa-search" aria-hidden="true"></i></a>
+
+                     </form>
+                    
+                    <li class="side-menu" style="margin-right:50px;">
+                        <a href="javascript:void(0)" onclick="showCartSlide()">
+                            <span class="circle-shape" style="background:#ff0000" id='counterText'> @cartCounter </span>
+                            <i class="fas fa-shopping-cart" style="font-size:24px;"></i>
+                        </a>
+                    </li>
+                </div>
+                <!-- /.navbar-collapse -->
+                <!-- Start Atribute Navigation -->
+        
+                <!-- End Atribute Navigation -->
+            </div>
+            <!-- Start Side Menu -->
+            <div class="sidenav" id="cartSlide">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeCartNav()">&times;</a>
+                <li class="cart-box">
+                    <ul class="cart-list" id="cartSlidContainer"></ul>
+                </li>
+            </div>
+
+            <div id="mySidenav" class="sidenav">
+                <h1 class="center">أهلا</h1>
+                <h4 class="center">@userName</h4>
+
+                <hr />
+                <a href="javascript:void(0)" class="closebtn" onclick="closeProfileNav()">&times;</a>
+                <li><a href="@Url.Action("MyAccount","Accounts")"><i class="fa fa-user s_color"></i> حسابى </a></li>
+
+                <li><a href="@Url.Action("MyAccount","Accounts")"><i class="fa fa-user s_color"></i> طلباتى </a></li>
+                <li><a href="@Url.Action("MyAccount","Accounts")"><i class="fa fa-user s_color"></i> المفضلة </a></li>
+                <li><a href="@Url.Action("MyAccount","Accounts")"><i class="fa fa-user s_color"></i> الاعدادات </a></li>
+            </div>
+            <!-- End Side Menu -->
+        </nav>
+         <!-- End Navigation -->
+    </header>
+    <!-- End Main Top -->
+
+
+    <script src="~/Content/js/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+    <script src="~/Content/js/dialogs.js"></script>
+    <script src="~/Content/js/images.js"></script>
+
+        @RenderBody()
+
+    <div class="sidenav" id="cartSlide">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeCartNav()">&times;</a>
+        <li class="cart-box">
+            <ul class="cart-list" id="cartSlidContainer"></ul>
+        </li>
+    </div>
+
+    <div id="mySidenav" class="sidenav">
+        <h1 class="center">أهلا</h1>
+        <h4 class="center">@userName</h4>
+
+        <hr />
+        <a href="javascript:void(0)" class="closebtn" onclick="closeProfileNav()">&times;</a>
+        <li><a href="@Url.Action("MyAccount","Accounts")"><i class="fa fa-user s_color"></i> حسابى </a></li>
+
+        <li><a href="@Url.Action("MyAccount","Accounts")"><i class="fa fa-user s_color"></i> طلباتى </a></li>
+        <li><a href="@Url.Action("MyAccount","Accounts")"><i class="fa fa-user s_color"></i> المفضلة </a></li>
+        <li><a href="@Url.Action("MyAccount","Accounts")"><i class="fa fa-user s_color"></i> الاعدادات </a></li>
+    </div>
+
+ 
+
+        <footer id="myFooter">
+            <div class="footer-main">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12 col-sm-12 footer-container">
+                            <div class="footer-top-box">
+                                <h3 class="footer-title">للتواصل معنا</h3>
+                                <ul class="list-time">
+                                    <li class="footer-text">البريد الالكترونى : amyz-feed@gmail.com</li>
+                                    <li>للاستفسار : 01030077137</li>
+                                    <li>عنوان المصنع : المحلة الكبرى، الغربية،، العامرية، الغربية 31815</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12 footer-container">
+                            <div style="text-align:center;">
+                                <img src="~/Content/img/logo.png" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12 footer-container">
+                            <div class="footer-top-box">
+                                <h3 class="footer-title">التواصل من خلال التواصل الاجتماعى</h3>
+                                <p> جميع صفاحاتنا على مواقع التواصل الاجتماعى .</p>
+                                <ul>
+                                    <li><a href="javascript:void(0)" title="صفحتنا على الفيسبوك"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void(0)" title="صفحتنا على تويتر"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
+                                    <li><a href="javascript:void(0)" title="صفحتنا على الانستجرام"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                         <h3 class="footer-title" style="text-align:center; color:#62A73C">جميع الحقوق محفوظة لشركة أميز &copy; 2021</h3>
+                    
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer  -->
+        <!-- Start copyright  -->
+ 
+        <!-- End copyright  --> 
+
+    <a href="#" id="back-to-top" class="prev" title="اذهب للأعلى"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
+
+ 
+
+
+
+        <!-- ALL JS FILES -->
+        <script src="~/Content/js/popper.min.js"></script>
+        <script src="~/Content/js/bootstrap.min.js"></script>
+        <!-- ALL PLUGINS -->
+        <script src="~/Content/js/jquery.superslides.min.js"></script>
+        <script src="~/Content/js/bootstrap-select.js"></script>
+        <script src="~/Content/js/inewsticker.js"></script>
+        <script src="~/Content/js/bootsnav.js"></script>
+        <script src="~/Content/js/images-loded.min.js"></script>
+        <script src="~/Content/js/isotope.min.js"></script>
+        <script src="~/Content/js/owl.carousel.min.js"></script>
+        <script src="~/Content/js/baguetteBox.min.js"></script>
+        <script src="~/Content/js/form-validator.min.js"></script>
+        <script src="~/Content/js/contact-form-script.js"></script>
+        <script src="~/Content/js/custom.js"></script>
+
+
+    </body>
+
+</html>
+
+
+
+
+<script>
+
+
+    function openProfileNav() {
+        document.getElementById("mySidenav").style.width = "350px";
+    }
+
+    function closeProfileNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+    function openCartNav() {
+        document.getElementById("cartSlide").style.width = "350px";
+    }
+
+    function closeCartNav() {
+        document.getElementById("cartSlide").style.width = "0";
+    }
+
+
+
+    function drawSlidCartContent(product) {
+        var html=' <li>';
+        html += '<a href="@Url.Action("ProductDetails", "Product")?id=' + product.Id + '" class="photo"><img src="' + product.ImageURL + '" class="cart-thumb" alt="" /></a>';
+        html += '<h6><a href="@Url.Action("ProductDetails", "Product")?id=' + product.Id + '">' + product.Name + ' </a></h6>';
+        html += '<p>'+product.Quantity+'x - <span class="price">' + product.Price + '</span></p>';
+        html += '</li>';
+
+        $('#cartSlidContainer').append(html);
+    }
+
+    function drawSlidCartTotal(total) {
+   
+       var html = '<li class="total">';
+        html += '<a href="@Url.Action("Index", "Order")" class="btn btn-default hvr-hover btn-cart">إكمال الطلب</a>';
+        html += '<span class="float-right"><strong>الاجمالى</strong>:' + '&nbsp' + total + " ج.م " + '</span>';
+        html += '</li>';
+
+        $('#cartSlidContainer').append(html);
+
+
+    }
+
+    function drawEmptyCart() {
+        var html = '<div class="container">'+
+            '<h1 style="text-align:center;">سلة المشتريات فارغة'+'</h1>'+'</div>';
+
+        $('#cartSlidContainer').append(html);
+    }
+
+    function showCartSlide() {
+        debugger;
+
+        $.ajax({
+            url: "@Url.Action("GetProductsCartSession", "HomePreview")",
+            type: "Get",
+            dataType: "json",
+            success: function (products) {
+                debugger;
+                $('#cartSlidContainer').empty();
+
+                if (products != null&& products.length>0) {
+
+                    var total = 0.0;
+
+                    $.each(products, function (index, value) {
+                        total += (value.Price*value.Quantity);
+                        drawSlidCartContent(value);
+                    });
+
+                    drawSlidCartTotal(total);
+                } else {
+
+                    drawEmptyCart();
+                }
+
+                openCartNav();
+
+
+            },
+            error: function (message) {
+                alert(message);
+
+            }
+        });
+
+
+    }
+
+
+
+    $(document).ready(function () {
+
+        $('#searching').click(function () {
+            debugger;
+            var word = $('#searchText').val();
+
+            if (word != "") {
+                window.location.href = '@Url.Action("SearchInProducts", "Product")?word=' + word;
+            }
+
+        });
+
+
+
+
+
+
+
+    })
+
+
+
+
+
+
+</script>

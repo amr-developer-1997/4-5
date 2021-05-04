@@ -1,0 +1,53 @@
+﻿@model AmyzFactory.Models.ProductViewModel
+@{
+    ViewBag.Title = "ProductDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Scripts.Render("~/bundles/jquery_admin")
+
+<script src="~/Content/js/add_to_cart.js"></script>
+
+
+<div class="about-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="banner-frame">
+                    <img class="product-img" src="@Model.ImageURL" style="margin:20px;" width="250px" height="250px" alt="" />
+                </div>
+            </div>
+            <div class="col-lg-9" style="text-align:right;">
+                <h2 class="noo-sh-title-top footer-title">@Model.Name</h2>
+
+                <h2 style="color:#62A73C;">المكونات :-</h2>
+                <p class="footer-text">
+                    @Model.Definition
+                </p>
+                <h2 style="color:#62A73C;">المحتوى من المركبات الغذائية :-</h2>
+
+
+                @if (Model.Description != null)
+                {
+                    using (StringReader reader = new StringReader(Model.Description))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            <p class="footer-text">
+                               @line
+                            </p>                  
+                        }
+                    }
+                }
+ 
+               
+                <a class="btn hvr-hover" href="javascript:void(0)"  onclick="addToCart(@Model.Id)">اضف الى العربة</a>
+                <a class="btn hvr-hover" style="background:#f19304;" href="#">اضافة الى المفضلة</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+

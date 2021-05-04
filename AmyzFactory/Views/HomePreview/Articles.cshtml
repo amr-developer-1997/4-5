@@ -1,0 +1,67 @@
+﻿
+@model IEnumerable<AmyzFactory.Models.TextsViewModel>
+@{
+    ViewBag.Title = "Articles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="latest-blog">
+    <div class="container">
+ 
+        <div>
+            <p class="page-define">المقالات والأخبار</p>
+        </div>
+
+
+        <div class="row" style="justify-content: center;">
+
+
+            @if (Model != null && Model.Count() > 0)
+            {
+
+
+                for (int i = 0; i < Model.Count(); i++)
+                {
+ 
+
+                    AmyzFactory.Models.TextsViewModel item = Model.ToList()[i];
+
+                    string content = item.Description;
+                    if (content.Length > 300)
+                    {
+                        content = content.Substring(0, 300) + ".......";
+                    }
+
+                    <div class="card" style="margin-bottom:15px;">
+                        <div class="row no-gutters">
+                            <div class="col-sm-3" style="background: #868e96;">
+                                <img src="@item.ImageUrl" class="card-img-top h-100" alt="">
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="card-body">
+                                    <h2 class="noo-sh-title-top footer-title" style="color:#62A73C;">@item.Title</h2>
+                                    <b>  <p class="footer-title">@item.SubTitle</p></b>
+                                     <p class="footer-title">@content</p>
+                                    <a href="@Url.Action("ArticleDetails","HomePreview",new { @id=item.Id})" class="btn btn-success stretched-link">قراءة المزيد</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+            }
+
+        </div>
+    </div>
+</div>
